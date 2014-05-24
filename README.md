@@ -42,7 +42,7 @@ docker build -t sybase_15_7 .
 docker run -i -t -p 5000:5000 -v sybase_15_7 bash
 
 ```
-#### 6) Keep the sybase_15_7 image running
+#### 6) If you want to keep the sybase_15_7 image running, to test it otherwise goto 7 to apply the dump
 in the bash prompt type to exit and keep the container running
 ```
 control-p then control-q
