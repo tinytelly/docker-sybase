@@ -2,7 +2,7 @@ docker-sybase
 =============
 
 ### How to run Sybase ASE on Docker.  
-This will allow you to create an Docker Image with Sybase on it (in this case Syabse ASE 15.7)
+This will allow you to create a Docker Image with Sybase on it (in this case Syabse ASE 15.7)
 This demo uses Redhat but most of the steps are generic.
 
 #### 1) Install docker
@@ -20,7 +20,7 @@ docker version
 ```
 
 #### 2) From a previous installation of Sybase ASE
-tar up the entire folder and call it : sybase_version_15_7.tgz.  For these instructions the server is called AWS. Note as you are going to need to change the /opt/sybase/interface file you will need to using a PLACE_HOLDER in that file where the ipaddress would normally go.  It will be swapped out in step 7 below.
+tar up the entire folder and call it : sybase_version_15_7.tgz.  For these instructions the server is called AWS. Note as you are going to need to change the /opt/sybase/interfaces file you will need to using a PLACE_HOLDER in that file where the ipaddress would normally go.  It will be swapped out in step 7 below.
 
 #### 3) Create a Sybase Image 
 vi Dockerfile the below
@@ -62,7 +62,7 @@ yum -y install dos2unix
 
 # 1) Get the IPAddress of the container and use it to configure this instance of Sybase
 IPADDRESS="$(ifconfig eth0 | sed -n '/inet /{s/.*addr://;s/ .*//;p}')"
-sed -i "s/PLACE_HOLDER/$IPADDRESS/g" /opt/sybase_aws/interfaces
+sed -i "s/PLACE_HOLDER/$IPADDRESS/g" /opt/sybase/interfaces
 
 # 2) Set memory for sybase and start it up
 rm -f /opt/sybase/ASE-15_0/install/AWS.log
@@ -76,7 +76,7 @@ LINES=$(grep 'Console logging is disabled. This is controlled via the ' /opt/syb
 while [ $LINES == 0 ]
     do
     sleep 5
-    LINES=$(grep 'Console logging is disabled. This is controlled via the ' /opt/sybase_aws/ASE-15_0/install/AWS.log | wc -l);
+    LINES=$(grep 'Console logging is disabled. This is controlled via the ' /opt/sybase/ASE-15_0/install/AWS.log | wc -l);
 done
 
 echo =================Sybase is Started============================
