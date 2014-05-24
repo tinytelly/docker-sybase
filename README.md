@@ -2,7 +2,7 @@ docker-sybase
 =============
 
 ### How to run Sybase ASE on Docker.  
-This will allow you to create an Docker Image with Syabse on it (in this case Syabse ASE 15.7)
+This will allow you to create an Docker Image with Sybase on it (in this case Syabse ASE 15.7)
 This demo uses Redhat but most of the steps are generic.
 
 #### 1) Install docker
@@ -20,9 +20,10 @@ docker version
 ```
 
 #### 2) From a previous installation of Sybase ASE
-tar up the entire folder and call it : sybase_version_15_7.tgz.  For these instructions the server is called AWS.
+tar up the entire folder and call it : sybase_version_15_7.tgz.  For these instructions the server is called AWS. Note as you are going to need to change the /opt/sybase/interface file you will need to using a PLACE_HOLDER in that file where the ipaddress would normally go.  It will be swapped out in step 7 below.
 
-#### 3) Create a Sybase Image
+#### 3) Create a Sybase Image 
+vi Dockerfile the below
 ```
 # DOCKER-VERSION 0.3.4
 FROM    centos:6.4
@@ -47,8 +48,8 @@ in the bash prompt type to exit and keep the container running
 control-p then control-q
 ```
 
-#### 7) Apply a dump file to the database
-copy the dumpfile called here a_sybase_dump.dmp to /tmp on the host. Also copy there the script listed in 7.1 calledrunSybase_15_7_and_install_dump.sh
+#### 7) Apply a dump file to the database via sh script
+copy the dumpfile to /tmp on the host. Also copy there the script listed in 7.1 calledrunSybase_15_7_and_install_dump.sh
 ```
 docker run -i -t -p 5000:5000 -v /tmp/:/tmpfromhost sybase_15_7 bash -c 'cd tmpfromhost; chmod 777 *.*; ./runSybase_15_7_and_install_dump.sh;'
 
@@ -61,7 +62,7 @@ yum -y install dos2unix
 
 # 1) Get the IPAddress of the container and use it to configure this instance of Sybase
 IPADDRESS="$(ifconfig eth0 | sed -n '/inet /{s/.*addr://;s/ .*//;p}')"
-sed -i "s/wm-db-ti1/$IPADDRESS/g" /opt/sybase_aws/interfaces
+sed -i "s/PLACE_HOLDER/$IPADDRESS/g" /opt/sybase_aws/interfaces
 
 # 2) Set memory for sybase and start it up
 rm -f /opt/sybase/ASE-15_0/install/AWS.log
@@ -98,7 +99,7 @@ done
 
 
 #### 8) Build the database Image after the above finishes
-docker commit <containerId> my_database_running_on_sybase
+docker commit containerId my_database_running_on_sybase
 
 #### 9) Start the new sybase image with running the database 
 docker run -i -t -p 5000:5000 -v /tmp:/tmpfromhost my_database_running_on_sybase bash -c 'cd tmpfromhost; chmod 777 *.*; ./startSybase.sh;'
