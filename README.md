@@ -101,7 +101,7 @@ done
 #### 8) Build the database Image after the above finishes
 docker commit containerId my_database_running_on_sybase
 
-#### 9) Start the new sybase image with running the database 
+#### 9) Start the new sybase image running the database 
 docker run -i -t -p 5000:5000 -v /tmp:/tmpfromhost my_database_running_on_sybase bash -c 'cd tmpfromhost; chmod 777 *.*; ./startSybase.sh;'
 
 ##### startSybase.sh looks like this
